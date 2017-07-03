@@ -10,7 +10,7 @@
                  [org.apache.poi/poi-ooxml "3.16"]
                  [org.apache.poi/ooxml-schemas "1.3"]
                  [org.apache.poi/poi-ooxml-schemas "3.16"]]
-  :aot [docx-utils.transformation]
+  :aot [docx-utils.schema]
   :resource-paths ["resources"]
   :profiles {:dev {:resource-paths ["test/resources"]}
              :repl {:resource-paths ["test/resources"]}})

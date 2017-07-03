@@ -1,4 +1,4 @@
-(ns docx-utils.utils
+(ns docx-utils.elements.run
   (:import (org.apache.poi.xwpf.usermodel XWPFRun)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main STHighlightColor$Enum)))
 

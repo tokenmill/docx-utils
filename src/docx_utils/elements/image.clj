@@ -1,4 +1,4 @@
-(ns docx-utils.image
+(ns docx-utils.elements.image
   (:require [clojure.java.io :as io]
             [docx-utils.constants :refer [page-width-in-emu]])
   (:import (org.apache.poi.xwpf.usermodel XWPFPicture XWPFRun Document)

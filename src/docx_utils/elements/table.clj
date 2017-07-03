@@ -1,6 +1,6 @@
-(ns docx-utils.table
+(ns docx-utils.elements.table
   (:require [clojure.tools.logging :as log]
-            [docx-utils.utils :refer [set-run]])
+            [docx-utils.elements.run :refer [set-run]])
   (:import (org.apache.poi.xwpf.usermodel XWPFTable XWPFTableRow XWPFTableCell XWPFRun)))
 
 (defn data-into-table [table-data ^XWPFTable table]

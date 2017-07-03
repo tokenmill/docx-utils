@@ -1,4 +1,4 @@
-(ns docx-utils.transformation)
+(ns docx-utils.schema)
 
 (defrecord Transformation [type placeholder replacement])
 

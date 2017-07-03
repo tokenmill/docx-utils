@@ -1,4 +1,4 @@
-(ns docx-utils.paragraph
+(ns docx-utils.elements.paragraph
   (:import (org.apache.poi.xwpf.usermodel XWPFParagraph XWPFDocument)))
 
 (defn clean-paragraph-content [^XWPFParagraph par]
