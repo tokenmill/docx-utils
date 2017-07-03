@@ -27,11 +27,25 @@
           output-file-path (docx/transform [(transformation :append-text "appended text")])]
       (is (string? output-file-path))
       (is (.exists (io/as-file output-file-path)))
-      (sh "libreoffice" output-file-path)))
+      (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
 
   (testing "Testing if transformation appends 1 Paragraph to the template document."
     (let [template-file-path (.getPath (io/resource "template-1.docx"))
           output-file-path (docx/transform [{:type :append-text :replacement "appended text as a map"}])]
       (is (string? output-file-path))
       (is (.exists (io/as-file output-file-path)))
-      (sh "libreoffice" output-file-path))))
+      (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
+
+  (testing "Testing if transformation appends 1 image to the template document."
+    (let [template-file-path (.getPath (io/resource "template-1.docx"))
+          output-file-path (docx/transform [{:type :append-image :replacement (.getPath (io/resource "test-image.jpg"))}])]
+      (is (string? output-file-path))
+      (is (.exists (io/as-file output-file-path)))
+      (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
+
+  (testing "Testing if transformation appends 1 table to the template document."
+    (let [template-file-path (.getPath (io/resource "template-1.docx"))
+          output-file-path (docx/transform [{:type :append-table :replacement [["a1" "b1" "c1"] ["a2" "b2" "c2"]]}])]
+      (is (string? output-file-path))
+      (is (.exists (io/as-file output-file-path)))
+      (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path))))

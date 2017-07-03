@@ -6,8 +6,7 @@
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFPicture XWPFRun XWPFTable)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main STTblWidth)))
 
-(defn paragraph
-  [^XWPFDocument document text]
+(defn paragraph [^XWPFDocument document text]
   (log/debugf "Adding a paragraph '%s' to the end of the document." text)
   (-> document (.createParagraph) (.createRun)
       (set-run :text text)))
@@ -18,6 +17,7 @@
       (image/insert image-path)))
 
 (defn table [^XWPFDocument doc table-data]
+  (log/debugf "Adding a table '%s' to the end of the document." table-data)
   (let [^XWPFTable table (.createTable doc)]
     (doto (-> table (.getCTTbl) (.addNewTblPr) (.addNewTblW))
       (.setType STTblWidth/DXA)
