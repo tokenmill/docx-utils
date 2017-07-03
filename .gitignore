@@ -1,3 +1,6 @@
+.idea/
+docx-utils.iml
+docx-utils-1.iml
 pom.xml
 pom.xml.asc
 *.jar
