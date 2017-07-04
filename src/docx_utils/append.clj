@@ -7,10 +7,18 @@
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFPicture XWPFRun XWPFTable)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main STTblWidth)))
 
-(defn paragraph [^XWPFDocument document text]
-  (log/debugf "Adding a paragraph '%s' to the end of the document." text)
+(defn text [^XWPFDocument document value]
+  (log/debugf "Adding a text '%s' to the end of the document." value)
   (-> document (.createParagraph) (.createRun)
-      (set-run :text text)))
+      (set-run :text value)))
+
+(defn text-inline [^XWPFDocument document value]
+  (log/debugf "Adding an inline text '%s' to the end of the document." value)
+  (if-let [last-paragraph (some-> document
+                              (.getParagraphs)
+                              (last))]
+    (-> last-paragraph (.createRun) (set-run :text value))
+    (text document value)))
 
 (defn ^XWPFPicture image [^XWPFDocument document image-path]
   (log/debugf "Adding an image '%s' to the end of the document." image-path)
@@ -20,9 +28,7 @@
 (defn table [^XWPFDocument document table-data]
   (log/debugf "Adding a table '%s' to the end of the document." table-data)
   (let [^XWPFTable table (.createTable document)]
-    (doto (-> table (.getCTTbl) (.addNewTblPr) (.addNewTblW))
-      (.setType STTblWidth/DXA)
-      (.setW (BigInteger/valueOf 9637)))
+    (table/fix-width table)
     (table/data-into-table table-data table)))
 
 (defn bullet-list [^XWPFDocument document list-data]

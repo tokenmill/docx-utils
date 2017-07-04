@@ -1,7 +1,13 @@
 (ns docx-utils.elements.table
   (:require [clojure.tools.logging :as log]
             [docx-utils.elements.run :refer [set-run]])
-  (:import (org.apache.poi.xwpf.usermodel XWPFTable XWPFTableRow XWPFTableCell XWPFRun)))
+  (:import (org.apache.poi.xwpf.usermodel XWPFTable XWPFTableRow XWPFTableCell XWPFRun)
+           (org.openxmlformats.schemas.wordprocessingml.x2006.main STTblWidth)))
+
+(defn fix-width [^XWPFTable table]
+  (doto (-> table (.getCTTbl) (.addNewTblPr) (.addNewTblW))
+    (.setType STTblWidth/DXA)
+    (.setW (BigInteger/valueOf 9637))))
 
 (defn data-into-table [table-data ^XWPFTable table]
   (log/debugf "Adding data to the table")

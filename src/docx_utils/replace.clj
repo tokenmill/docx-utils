@@ -8,7 +8,7 @@
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFRun XWPFAbstractNum XWPFNumbering XWPFTable)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main CTNumbering CTAbstractNum CTNumbering$Factory STTblWidth)))
 
-(defn with-inline-text
+(defn with-text-inline
   "Text replacement based on XWPFRun class."
   [^XWPFDocument doc ^String match ^String replacement]
   (log/debugf "Replacing text '%s' with text '%s'" match replacement)
@@ -49,9 +49,14 @@
   (if (seq table-data)
     (let [^XWPFParagraph par (paragraph/find-paragraph doc match)
           ^XWPFTable table (.insertNewTbl doc (.newCursor (.getCTP par)))]
-      (doto (-> table (.getCTTbl) (.addNewTblPr) (.addNewTblW))
-        (.setType STTblWidth/DXA)
-        (.setW (BigInteger/valueOf 9637)))
+      (table/fix-width table)
       (table/data-into-table table-data table)
       (paragraph/delete-paragraph doc par))
+    (paragraph/delete-placeholder-paragraph doc match)))
+
+(defn with-numbered-list [^XWPFDocument doc ^String match list-data]
+  (log/debugf "Replacing the paragraph '%s' with a numbered list '%s'" match list-data)
+  (if (seq list-data)
+    (let [^XWPFParagraph placeholder-paragraph (paragraph/find-paragraph doc match)]
+      (docx-utils.elements.listing/numbered-list doc placeholder-paragraph list-data))
     (paragraph/delete-placeholder-paragraph doc match)))

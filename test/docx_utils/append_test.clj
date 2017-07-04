@@ -12,6 +12,10 @@
       (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
 
   (testing "Testing if transformation appends 1 Paragraph to the template document."
+    (let [output-file-path (docx/transform [(transformation :append-text-inline "appended inline text")])]
+      (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
+
+  (testing "Testing if transformation appends 1 Paragraph to the template document."
     (let [output-file-path (docx/transform [{:type :append-text :replacement "appended text as a map"}])]
       (sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
 
