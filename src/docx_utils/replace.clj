@@ -4,7 +4,8 @@
             [docx-utils.elements.paragraph :as paragraph]
             [docx-utils.elements.run :refer [set-run]]
             [docx-utils.elements.image :as image]
-            [docx-utils.elements.table :as table])
+            [docx-utils.elements.table :as table]
+            [docx-utils.elements.listing :as listing])
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFRun XWPFAbstractNum XWPFNumbering XWPFTable)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main CTNumbering CTAbstractNum CTNumbering$Factory STTblWidth)))
 
@@ -28,7 +29,6 @@
       (set-run (.createRun par) :text replacement))
     (paragraph/delete-placeholder-paragraph doc match)))
 
-
 (defn with-image [^XWPFDocument doc ^String match image-path]
   (log/debugf "Replacing the paragraph '%s' with image '%s'" match image-path)
   (let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
@@ -39,7 +39,14 @@
   (log/debugf "Replacing the paragraph '%s' with list '%s'" match list-data)
   (if (seq list-data)
     (let [^XWPFParagraph placeholder-paragraph (paragraph/find-paragraph doc match)]
-      (docx-utils.elements.listing/bullet-list doc placeholder-paragraph list-data))
+      (listing/bullet-list doc placeholder-paragraph list-data))
+    (paragraph/delete-placeholder-paragraph doc match)))
+
+(defn with-numbered-list [^XWPFDocument doc ^String match list-data]
+  (log/debugf "Replacing the paragraph '%s' with a numbered list '%s'" match list-data)
+  (if (seq list-data)
+    (let [^XWPFParagraph placeholder-paragraph (paragraph/find-paragraph doc match)]
+      (listing/numbered-list doc placeholder-paragraph list-data))
     (paragraph/delete-placeholder-paragraph doc match)))
 
 (defn with-table
@@ -52,11 +59,4 @@
       (table/fix-width table)
       (table/data-into-table table-data table)
       (paragraph/delete-paragraph doc par))
-    (paragraph/delete-placeholder-paragraph doc match)))
-
-(defn with-numbered-list [^XWPFDocument doc ^String match list-data]
-  (log/debugf "Replacing the paragraph '%s' with a numbered list '%s'" match list-data)
-  (if (seq list-data)
-    (let [^XWPFParagraph placeholder-paragraph (paragraph/find-paragraph doc match)]
-      (docx-utils.elements.listing/numbered-list doc placeholder-paragraph list-data))
     (paragraph/delete-placeholder-paragraph doc match)))

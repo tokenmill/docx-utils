@@ -9,7 +9,6 @@
 (deftest docx-transformations-test
   (testing "Testing if transformation returns a file path of an existing file when Transformation list is nil."
 
-    ;; when
     (let [output-file-path (docx/transform nil nil)]
       (is (string? output-file-path))
       (is (.exists (io/as-file output-file-path))))
