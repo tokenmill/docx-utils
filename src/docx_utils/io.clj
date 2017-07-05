@@ -27,7 +27,7 @@
 (defn store
   [^XWPFDocument document output-file-path]
   (when-not (.exists (io/as-file output-file-path))
-    (throw (Exception. (str "Output file " output-file-path " does not exits."))))
+    (io/file output-file-path))
   (log/debugf "Writing the transformed template document to the output file '%s'." output-file-path)
   (with-open [o (io/output-stream output-file-path)]
     (.write document o)))
