@@ -24,7 +24,7 @@
   [^XWPFDocument doc ^String match ^String replacement]
   (log/debugf "Replacing the paragraph '%s' with text '%s'" match replacement)
   (if (not (str/blank? replacement))
-    (let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
+    (when-let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
       (paragraph/clean-paragraph-content par)
       (set-run (.createRun par) :text replacement))
     (paragraph/delete-placeholder-paragraph doc match)))
