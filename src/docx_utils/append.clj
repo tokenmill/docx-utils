@@ -32,13 +32,13 @@
     (table/data-into-table table-data table)))
 
 (defn bullet-list [^XWPFDocument document list-data]
-  (log/debugf "Adding a bullet list '%s' to the end of the document." list-data)
+  (log/debugf "Adding a bullet list '%s' to the end of the document." (pr-str list-data))
   (let [paragraph (-> document (.createParagraph))]
     (.createRun paragraph)
     (listing/bullet-list document paragraph list-data)))
 
 (defn numbered-list [^XWPFDocument document list-data]
-  (log/debugf "Adding a numbered list '%s' to the end of the document." list-data)
+  (log/debugf "Adding a numbered list '%s' to the end of the document." (pr-str list-data))
   (let [paragraph (-> document (.createParagraph))]
     (.createRun paragraph)
     (listing/numbered-list document paragraph list-data)))

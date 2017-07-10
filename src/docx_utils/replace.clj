@@ -52,7 +52,7 @@
 (defn with-table
   "Given a placeholder string, inserts a table there."
   [^XWPFDocument doc ^String match table-data]
-  (log/debugf "Replacing the paragraph '%s' with table '%s'" match table-data)
+  (log/debugf "Replacing the paragraph '%s' with table '%s'" match (pr-str table-data))
   (if (seq table-data)
     (let [^XWPFParagraph par (paragraph/find-paragraph doc match)
           ^XWPFTable table (.insertNewTbl doc (.newCursor (.getCTP par)))]
