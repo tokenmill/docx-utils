@@ -13,7 +13,7 @@
   "Text replacement based on XWPFRun class."
   [^XWPFDocument doc ^String match ^String replacement]
   (log/debugf "Replacing text '%s' with text '%s'" match replacement)
-  (doseq [^XWPFParagraph par (.getParagraphs doc)]
+  (doseq [^XWPFParagraph par (paragraph/paragraphs doc)]
     (doseq [^XWPFRun run (.getRuns par)]
       (when (and (.getText run 0)
                  (str/includes? (.getText run 0) match))
