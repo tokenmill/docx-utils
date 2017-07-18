@@ -10,6 +10,7 @@
                  [org.apache.poi/ooxml-schemas "1.3"]
                  [org.apache.poi/poi-ooxml-schemas "3.16"]]
   :aot [docx-utils.schema]
+  :plugins [[lein-codox "0.10.3"]]
   :resource-paths ["resources"]
   :profiles {:dev {:resource-paths ["test/resources"]}
              :repl {:resource-paths ["test/resources"]}})
