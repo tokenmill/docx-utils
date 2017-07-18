@@ -53,7 +53,8 @@ To replace a placeholder with a data table:
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-table
                              :placeholder "${PLACEHOLDER}"
-                             :replacement [["cell 11" "cell 12" "cell 13"] ["cell 21" "cell 22" "cell 23"]]}])
+                             :replacement [["cell 11" "cell 12" "cell 13"]
+                                           ["cell 21" "cell 22" "cell 23"]]}])
 ```
 
 To replace a placeholder with a bulleted list:
@@ -70,6 +71,7 @@ To replace a placeholder with a numbered list:
                            [{:type        :replace-numbered-list
                              :placeholder "${PLACEHOLDER}"
                              :replacement ["item 1" "item 2" "item 3"]}])
+```
 
 To replace a placeholder with an image:
 ```clojure
@@ -97,7 +99,8 @@ To append a data table to the end of the template document:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :append-table
-                             :replacement [["cell 11" "cal 12" "cell 13"] ["cell 21" "cell 22" "cell 23"]]}])
+                             :replacement [["cell 11" "cell 12" "cell 13"]
+                                           ["cell 21" "cell 22" "cell 23"]]}])
 ```
 
 To append a bullet list to the end of the template document:
@@ -119,6 +122,7 @@ To append an image to the end of the template document:
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-image
                              :replacement "/path/to/image/file.jpg"}])
+```
 
 # Future work
 - `:replacement` could be either a `String` or a map. If `String` then the value is pasted into the document without any additional formating (the formating of the placeholder is preserved), if a map is provided the underlying `Run` is formated accordingly to the options provided in a map, e.g. {:bold true :text "Bolded text"}.
