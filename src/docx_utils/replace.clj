@@ -11,7 +11,7 @@
 
 (defn with-text-inline
   "Text replacement based on XWPFRun class."
-  [^XWPFDocument doc ^String match ^String replacement]
+  [^XWPFDocument doc ^String match replacement]
   (log/debugf "Replacing text '%s' with text '%s'" match replacement)
   (doseq [^XWPFParagraph par (paragraph/paragraphs doc)]
     (doseq [^XWPFRun run (.getRuns par)]
@@ -21,9 +21,9 @@
 
 (defn with-text
   "Text replacement based on XWPFParagraph class."
-  [^XWPFDocument doc ^String match ^String replacement]
+  [^XWPFDocument doc ^String match replacement]
   (log/debugf "Replacing the paragraph '%s' with text '%s'" match replacement)
-  (if (not (str/blank? replacement))
+  (if (not (and (string? replacement) (str/blank? replacement)))
     (when-let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
       (paragraph/clean-paragraph-content par)
       (set-run (.createRun par) :text replacement))

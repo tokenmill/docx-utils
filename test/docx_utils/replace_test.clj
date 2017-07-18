@@ -11,6 +11,11 @@
                                            [(schema/transformation :replace-text "${PLACEHOLDER}" "Replaced with plaint text.")])]
       (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
 
+  (testing "Testing if transformation replaces placeholder in the template document with a number."
+    (let [output-file-path (docx/transform (.getPath (io/resource "template-2-replace-placeholder.docx"))
+                                           [(schema/transformation :replace-text "${PLACEHOLDER}" 12345)])]
+      (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
+
   (testing "Testing if transformation replaces placeholder in the template document with inline plain text."
     (let [output-file-path (docx/transform (.getPath (io/resource "template-2-replace-placeholder.docx"))
                                            [(schema/transformation :replace-text-inline "${PLACEHOLDER}" "Replaced with plain inline text.")])]
