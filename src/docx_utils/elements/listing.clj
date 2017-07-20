@@ -19,7 +19,7 @@
         (.setNumID item-paragraph numID)
         (.setStyle item-paragraph "ListParagraph")
         (-> item-paragraph (.getCTP) (.getPPr) (.getNumPr) (.addNewIlvl) (.setVal (BigInteger/ZERO)))
-        (set-run (.createRun item-paragraph) :text item :bold (nth bolds index) :highlight-color (nth highlight-colors index))))
+        (set-run (.createRun item-paragraph) item)))
     (paragraph/delete-paragraph doc paragraph)))
 
 (defn numbered-list [^XWPFDocument doc ^XWPFParagraph paragraph list-data]
@@ -36,5 +36,5 @@
         (.setNumID item-paragraph numID)
         (.setStyle item-paragraph "ListParagraph")
         (-> item-paragraph (.getCTP) (.getPPr) (.getNumPr) (.addNewIlvl) (.setVal (BigInteger/ZERO)))
-        (set-run (.createRun item-paragraph) :text item :bold (nth bolds index) :highlight-color (nth highlight-colors index))))
+        (set-run (.createRun item-paragraph) item)))
     (paragraph/delete-paragraph doc paragraph)))

@@ -18,5 +18,5 @@
       (doseq [[cell-index cell-value] (map vector (iterate inc 0) line)]
         (let [^XWPFTableCell cell (or (.getCell row cell-index) (.createCell row))
               ^XWPFRun run (-> cell (.getParagraphs) (first) (.createRun))]
-          (set-run run :text cell-value :bold cell-boldness)
+          (set-run run cell-value)
           (.setColor cell color))))))

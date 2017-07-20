@@ -17,7 +17,8 @@
     (doseq [^XWPFRun run (.getRuns par)]
       (when (and (.getText run 0)
                  (str/includes? (.getText run 0) match))
-        (set-run run :text (str/replace (.getText run 0) match (str replacement)))))))
+        (let [value (str/replace (.getText run 0) match (str replacement))]
+          (set-run run value))))))
 
 (defn with-text
   "Text replacement based on XWPFParagraph class."
@@ -26,7 +27,7 @@
   (if (not (and (string? replacement) (str/blank? replacement)))
     (when-let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
       (paragraph/clean-paragraph-content par)
-      (set-run (.createRun par) :text replacement))
+      (set-run (.createRun par) replacement))
     (paragraph/delete-placeholder-paragraph doc match)))
 
 (defn with-image [^XWPFDocument doc ^String match image-path]

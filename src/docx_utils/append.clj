@@ -10,14 +10,14 @@
 (defn text [^XWPFDocument document value]
   (log/debugf "Adding a text '%s' to the end of the document." value)
   (-> document (.createParagraph) (.createRun)
-      (set-run :text value)))
+      (set-run value)))
 
 (defn text-inline [^XWPFDocument document value]
   (log/debugf "Adding an inline text '%s' to the end of the document." value)
   (if-let [last-paragraph (some-> document
                               (.getParagraphs)
                               (last))]
-    (-> last-paragraph (.createRun) (set-run :text value))
+    (-> last-paragraph (.createRun) (set-run value))
     (text document value)))
 
 (defn ^XWPFPicture image [^XWPFDocument document image-path]
