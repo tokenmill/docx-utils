@@ -5,27 +5,31 @@
             [docx-utils.replace :as replace])
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument)))
 
+(defn decorate-placeholder [undecorated-placeholder]
+  (str "${" undecorated-placeholder "}"))
+
 (defn apply-transformation [^XWPFDocument document {:keys [type placeholder replacement]}]
-  (log/infof "Applying transformation of type '%s' for placeholder '%s' with replacement '%s'"
-             type placeholder replacement)
-  (try
-    (cond
-      (= :append-text type) (append/text document replacement)
-      (= :append-text-inline type) (append/text-inline document replacement)
-      (= :append-image type) (append/image document replacement)
-      (= :append-table type) (append/table document replacement)
-      (= :append-bullet-list type) (append/bullet-list document replacement)
-      (= :append-numbered-list type) (append/numbered-list document replacement)
-      (= :replace-text type) (replace/with-text document placeholder replacement)
-      (= :replace-text-inline type) (replace/with-text-inline document placeholder replacement)
-      (= :replace-table type) (replace/with-table document placeholder replacement)
-      (= :replace-image type) (replace/with-image document placeholder replacement)
-      (= :replace-bullet-list type) (replace/with-bullet-list document placeholder replacement)
-      (= :replace-numbered-list type) (replace/with-numbered-list document placeholder replacement)
-      :else (log/warnf "Unknown transformation type '%s'" type))
-    (catch Exception e
-      (log/errorf "Failed transformation with type '%s' placeholder '%s' and replacement '%s' with exception: %s"
-                  type placeholder replacement (.printStackTrace e)))))
+  (let [decorated-placeholder (decorate-placeholder placeholder)]
+    (log/infof "Applying transformation of type '%s' for placeholder '%s' with replacement '%s'"
+               type decorated-placeholder replacement)
+    (try
+      (cond
+        (= :append-text type) (append/text document replacement)
+        (= :append-text-inline type) (append/text-inline document replacement)
+        (= :append-image type) (append/image document replacement)
+        (= :append-table type) (append/table document replacement)
+        (= :append-bullet-list type) (append/bullet-list document replacement)
+        (= :append-numbered-list type) (append/numbered-list document replacement)
+        (= :replace-text type) (replace/with-text document decorated-placeholder replacement)
+        (= :replace-text-inline type) (replace/with-text-inline document decorated-placeholder replacement)
+        (= :replace-table type) (replace/with-table document decorated-placeholder replacement)
+        (= :replace-image type) (replace/with-image document decorated-placeholder replacement)
+        (= :replace-bullet-list type) (replace/with-bullet-list document decorated-placeholder replacement)
+        (= :replace-numbered-list type) (replace/with-numbered-list document decorated-placeholder replacement)
+        :else (log/warnf "Unknown transformation type '%s'" type))
+      (catch Exception e
+        (log/errorf "Failed transformation with type '%s' decorated-placeholder '%s' and replacement '%s' with exception: %s"
+                    type decorated-placeholder replacement (.printStackTrace e))))))
 
 (defn apply-transformations [^XWPFDocument document transformations]
   (doseq [transformation transformations]

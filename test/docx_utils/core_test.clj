@@ -19,4 +19,8 @@
       (is (.exists (io/as-file output-file-path))))
 
     ;; When template file doesn't exits then exception
-    (is (thrown? Exception (docx/transform "DOES-NOT-EXIST.docx" nil)))))
+    (is (thrown? Exception (docx/transform "DOES-NOT-EXIST.docx" nil))))
+
+  (testing "Testing if decorate-placeholder decorates placeholder with ${_}."
+    (let [random-str (str (rand-int 1000))]
+      (is (= (docx/decorate-placeholder random-str) (str "${"random-str"}"))))))
