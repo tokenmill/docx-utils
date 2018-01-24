@@ -4,7 +4,8 @@
             [clojure.java.shell :refer [sh]]
             [docx-utils.core :as docx]
             [docx-utils.schema :refer [transformation]])
-  (:import (java.io File)))
+  (:import (java.io File)
+           (org.apache.poi.xwpf.usermodel XWPFDocument)))
 
 (deftest docx-transformations-test
   (testing "Testing if transformation returns a file path of an existing file when Transformation list is nil."
@@ -24,3 +25,16 @@
   (testing "Testing if decorate-placeholder decorates placeholder with ${_}."
     (let [random-str (str (rand-int 1000))]
       (is (= (docx/decorate-placeholder random-str) (str "${"random-str"}"))))))
+
+(deftest docx-in-memory-transformations-test
+  (testing "Testing transformation that never touches any HDD."
+
+    (with-open [input-stream (java.io.FileInputStream.
+                              (io/file (io/resource "template-1.docx")))]
+      (is (->>
+           (docx/transform-byte-stream
+            []
+            input-stream
+            identity)
+           type
+           (.isAssignableFrom XWPFDocument))))))

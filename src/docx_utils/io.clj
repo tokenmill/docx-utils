@@ -19,10 +19,15 @@
   [^String template-file-path]
   (when (and (not (nil? template-file-path))
              (not (.exists (io/as-file template-file-path))))
-    (throw (Exception. (str "Template file " template-file-path " does not exits."))))
+    (throw (Exception. (str "Template file " template-file-path " does not exist."))))
   (if (nil? template-file-path)
     (empty-template)
     (XWPFDocument. (POIXMLDocument/openPackage template-file-path))))
+
+(defn ^XWPFDocument load-template-from-memory
+  "Loads the template file from memory."
+  [^java.io.InputStream template-bytes]
+  (XWPFDocument. template-bytes))
 
 (defn store
   [^XWPFDocument document output-file-path]
