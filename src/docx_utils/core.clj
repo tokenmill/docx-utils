@@ -56,6 +56,5 @@
   Returns output of the consumer."
   ([transformations ^java.io.InputStream doc-input-stream doc-stream-consumer]
    (with-open [^XWPFDocument document (docx-io/load-template-from-memory doc-input-stream)]
-     (log/infof "Applying transformations %s" transformations)
      (apply-transformations document transformations)
      (doc-stream-consumer document))))
