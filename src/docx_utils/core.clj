@@ -1,5 +1,6 @@
 (ns docx-utils.core
-  (:require [clojure.tools.logging :as log]
+  (:require [clojure.java.io :as io]
+            [clojure.tools.logging :as log]
             [docx-utils.io :as docx-io]
             [docx-utils.append :as append]
             [docx-utils.replace :as replace])
@@ -49,12 +50,12 @@
      (docx-io/store document output-file-path)
      output-file-path)))
 
-(defn transform-byte-stream
-  "Retrieves document input stream from doc-stream-producer.
-  Transforms the stream data and pipes it into consumer.
-  Consumer can call .write on given XWPFDocument object.
-  Returns output of the consumer."
-  ([transformations ^java.io.InputStream doc-input-stream doc-stream-consumer]
+(defn transform-input-stream
+  "Retrieves document from given InputStream.
+  Transforms the stream data and returns a new InputStream."
+  ([transformations ^java.io.InputStream doc-input-stream]
    (with-open [^XWPFDocument document (docx-io/load-template-from-memory doc-input-stream)]
      (apply-transformations document transformations)
-     (doc-stream-consumer document))))
+     (with-open [output-stream (java.io.ByteArrayOutputStream.)]
+       (.write document output-stream)
+       (io/input-stream (.toByteArray output-stream))))))
