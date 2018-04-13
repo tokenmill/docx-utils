@@ -28,13 +28,11 @@
 
 (deftest docx-in-memory-transformations-test
   (testing "Testing transformation that never touches any HDD."
-
     (with-open [input-stream (java.io.FileInputStream.
                               (io/file (io/resource "template-1.docx")))]
       (is (->>
-           (docx/transform-byte-stream
+           (docx/transform-input-stream
             []
-            input-stream
-            identity)
+            input-stream)
            type
-           (.isAssignableFrom XWPFDocument))))))
+           (.isAssignableFrom java.io.BufferedInputStream))))))

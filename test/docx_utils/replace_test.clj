@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [clojure.java.shell :as shell]
             [clojure.java.io :as io]
+            [docx-utils.io :as docx-io]
             [docx-utils.core :as docx]
             [docx-utils.schema :as schema]))
 
@@ -56,4 +57,19 @@
     (let [output-file-path (docx/transform (.getPath (io/resource "template-2-replace-placeholder.docx"))
                                            [(schema/transformation :replace-bullet-list "PLACEHOLDER"
                                                                    [{:text "item1" :bold true} {:text "item 2" :bold false :highlight-color "red"}])])]
+      (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path)))
+
+  (testing "Testing if tokens can be in lowercase."
+    (let [output-file-path (docx/transform (.getPath (io/resource "template-4-lowercase-token.docx"))
+                                           [(schema/transformation :replace-text "lowercase_token" "Lowercase tokens get replaced.")])]
+      (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path))))
+
+(deftest byte-stream-replace-test
+  (testing "Testing if transformation replaces placeholder in the template document with plain text."
+    (let [input-stream (docx/transform-input-stream
+                        [(schema/transformation :replace-text "PLACEHOLDER" "Byte stream replace works.")]
+                        (io/input-stream (io/resource "template-2-replace-placeholder.docx")))
+          output-file-path (docx-io/temp-output-file)]
+      (with-open [o (io/output-stream (io/file output-file-path))]
+        (io/copy input-stream o))
       (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path))))

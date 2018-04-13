@@ -5,7 +5,6 @@
             [docx-utils.core :as docx]
             [docx-utils.schema :refer [transformation]]))
 
-
 (deftest append-test
   (testing "Testing if transformation appends 1 Paragraph to the template document."
     (let [output-file-path (docx/transform [(transformation :append-text "appended text")])]
