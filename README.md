@@ -36,7 +36,7 @@ To replace a placeholder with a paragraph text:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-text
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement "Standalone paragraph."}])
 ```
 
@@ -44,7 +44,7 @@ To replace a placeholder inside a text paragraph:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-text-inline
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement "in-lined text"}])
 ```
 
@@ -52,7 +52,7 @@ To replace a placeholder with a data `table`:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-table
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement [["cell 11" "cell 12" "cell 13"]
                                            ["cell 21" "cell 22" "cell 23"]]}])
 ```
@@ -61,7 +61,7 @@ To replace a placeholder with a bulleted list:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-bullet-list
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement ["item 1" "item 2" "item 3"]}])
 ```
 
@@ -69,7 +69,7 @@ To replace a placeholder with a numbered list:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-numbered-list
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement ["item 1" "item 2" "item 3"]}])
 ```
 
@@ -77,7 +77,7 @@ To replace a placeholder with an image:
 ```clojure
 (docx-utils.core/transform "/path/to/template/file.docx"
                            [{:type        :replace-image
-                             :placeholder "${PLACEHOLDER}"
+                             :placeholder "%{PLACEHOLDER}"
                              :replacement "/path/to/image/file.jpg"}])
 ```
 
