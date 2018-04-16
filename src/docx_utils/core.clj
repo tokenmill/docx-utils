@@ -7,7 +7,7 @@
   (:import (org.apache.poi.xwpf.usermodel XWPFDocument)))
 
 (defn decorate-placeholder [undecorated-placeholder]
-  (str "${" undecorated-placeholder "}"))
+  (str "%{" undecorated-placeholder "}"))
 
 (defn apply-transformation [^XWPFDocument document {:keys [type placeholder replacement]}]
   (let [decorated-placeholder (decorate-placeholder placeholder)]
