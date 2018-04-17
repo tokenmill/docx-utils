@@ -24,7 +24,7 @@
 
   (testing "Testing if decorate-placeholder decorates placeholder with ${_}."
     (let [random-str (str (rand-int 1000))]
-      (is (= (docx/decorate-placeholder random-str) (str "${"random-str"}"))))))
+      (is (= (docx/decorate-placeholder random-str) (str "%{"random-str"}"))))))
 
 (deftest docx-in-memory-transformations-test
   (testing "Testing transformation that never touches any HDD."

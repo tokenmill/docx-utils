@@ -2,11 +2,11 @@
   (:require [clojure.tools.logging :as log]
             [clojure.string :as str]
             [docx-utils.elements.paragraph :as paragraph]
-            [docx-utils.elements.run :refer [set-run]]
+            [docx-utils.elements.run :as run]
             [docx-utils.elements.image :as image]
             [docx-utils.elements.table :as table]
             [docx-utils.elements.listing :as listing])
-  (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFRun XWPFAbstractNum XWPFNumbering XWPFTable)
+  (:import (org.apache.poi.xwpf.usermodel XWPFDocument XWPFParagraph XWPFRun XWPFAbstractNum XWPFNumbering XWPFTable PositionInParagraph)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main CTNumbering CTAbstractNum CTNumbering$Factory STTblWidth)))
 
 (defn with-text-inline
@@ -14,11 +14,16 @@
   [^XWPFDocument doc ^String match replacement]
   (log/debugf "Replacing text '%s' with text '%s'" match replacement)
   (doseq [^XWPFParagraph par (paragraph/paragraphs doc)]
-    (doseq [^XWPFRun run (.getRuns par)]
-      (when (and (.getText run 0)
-                 (str/includes? (.getText run 0) match))
-        (let [value (str/replace (.getText run 0) match (str replacement))]
-          (set-run run value))))))
+    (loop []
+      (when-let [found (.searchText par match (new PositionInParagraph))]
+        (let [begin-run (run/find-first-found-run par found)]
+          (run/merge-runs! par found)
+          (let [value (str/replace
+                       (.getText begin-run 0)
+                       match
+                       (str replacement))]
+            (run/set-run begin-run value)))
+        (recur)))))
 
 (defn with-text
   "Text replacement based on XWPFParagraph class."
@@ -27,7 +32,7 @@
   (if (not (and (string? replacement) (str/blank? replacement)))
     (when-let [^XWPFParagraph par (paragraph/find-paragraph doc match)]
       (paragraph/clean-paragraph-content par)
-      (set-run (.createRun par) replacement))
+      (run/set-run (.createRun par) replacement))
     (paragraph/delete-placeholder-paragraph doc match)))
 
 (defn with-image [^XWPFDocument doc ^String match image-path]

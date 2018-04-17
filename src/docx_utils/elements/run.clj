@@ -1,6 +1,6 @@
 (ns docx-utils.elements.run
   (:require [clojure.tools.logging :as log])
-  (:import (org.apache.poi.xwpf.usermodel XWPFRun)
+  (:import (org.apache.poi.xwpf.usermodel XWPFRun XWPFParagraph TextSegement)
            (org.openxmlformats.schemas.wordprocessingml.x2006.main STHighlightColor$Enum)))
 
 (defn- configure-run [^XWPFRun run {:keys [text pos bold highlight-color]
@@ -36,3 +36,37 @@
 
 (defmethod set-run :default [run value]
   (log/warnf "Not supported value: %s" value))
+
+(defn run-ids-to-text
+  [^XWPFParagraph par run-range]
+  (let [runs (.getRuns par)]
+    (reduce
+     (fn [string run-id]
+       (str string (.getText (.get runs run-id) 0)))
+     ""
+     run-range)))
+
+(defn remove-rest-runs!
+  [^XWPFParagraph par run-range]
+  (reduce
+   (fn [_ run-id]
+     (.removeRun par run-id))
+   nil
+   (reverse (rest run-range))))
+
+(defn find-first-found-run [^XWPFParagraph par ^TextSegement found-segment]
+  (.get (.getRuns par)
+        (.getBeginRun found-segment)))
+
+(defn run-id-range [^TextSegement found-segment]
+  (range
+   (.getBeginRun found-segment)
+   (inc (.getEndRun found-segment))))
+
+(defn merge-runs!
+  [^XWPFParagraph par ^TextSegement found-segment]
+  (let [run-ids (run-id-range found-segment)]
+    (.setText
+     (find-first-found-run par found-segment)
+     (run-ids-to-text par run-ids) 0)
+    (remove-rest-runs! par (run-id-range found-segment))))

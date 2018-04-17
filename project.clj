@@ -1,4 +1,4 @@
-(defproject lt.tokenmill/docx-utils "1.0.2"
+(defproject lt.tokenmill/docx-utils "1.0.3"
   :description "Library to transform .docx documents."
   :url "https://github.com/tokenmill/docx-utils"
   :license {:name "MIT License"}

@@ -77,5 +77,5 @@
 (deftest replace-multi-run-test
   (testing "multiple runs in paragraph"
     (let [output-file-path (docx/transform (.getPath (io/resource "template-5-multi-run.docx"))
-                                           [(schema/transformation :replace-text-inline "name" "Replaced with plaint text.")])]
+                                           [(schema/transformation :replace-text-inline "casename" "Multi-run replace works.")])]
       (shell/sh "timeout" "5s" "libreoffice" "--norestore" output-file-path))))
