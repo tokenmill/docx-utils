@@ -1,3 +1,7 @@
+<a href="http://www.tokenmill.lt">
+      <img src=".github/tokenmill-logo.svg" width="125" height="125" align="right" />
+</a>
+
 # docx-utils
 Library that helps to work with `.docx` files.
 
@@ -128,3 +132,9 @@ To append an image to the end of the template document:
 - `:replacement` could be either a `String` or a map. If `String` then the value is pasted into the document without any additional formating (the formating of the placeholder is preserved), if a map is provided the underlying `Run` is formated accordingly to the options provided in a map, e.g. `{:bold true :text "Bolded text"}`.
 - `:type` value should be somehow taken from a list of values. Maybe a namespace with constants? e.g. `(def REPLACE_TEXT :replace-text)`. Or Java enums?
 - expose a Java interface to the library.
+
+## License
+
+Copyright &copy; 2017-2019 [TokenMill UAB](http://www.tokenmill.lt).
+
+Distributed under the MIT License.
